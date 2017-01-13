@@ -1,18 +1,25 @@
 package com.jumpingbeanapps.android.custombeatbox;
 
-class Sound {
+public class Sound {
+    private String mSoundPath;
+    private String mName;
 
-    private String name;
+    public Sound(){
 
-    public String getName() {
-        return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getSoundPath(){
+        return mSoundPath;
     }
 
-    void play(){
+    public String getName(){
+        return mName;
+    }
+    public void setName(String s){
+        mName = s;
+    }
+
+    public void play(){
 
     }
 }

@@ -1,6 +1,7 @@
 package com.jumpingbeanapps.android.custombeatbox;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
     }
 
     static class SoundHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
+            implements View.OnClickListener{
 
         private Button button;
         private Sound sound;
@@ -37,6 +38,7 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
         public void onClick(View view) {
             sound.play();
         }
+
     }
 
     @Override

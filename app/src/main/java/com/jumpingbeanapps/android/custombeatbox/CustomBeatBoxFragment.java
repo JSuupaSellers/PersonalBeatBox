@@ -18,10 +18,15 @@ public class CustomBeatBoxFragment extends Fragment {
 
     private SoundAdapter soundAdapter;
 
+    public static CustomBeatBoxFragment newInstance(){
+        return new CustomBeatBoxFragment();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        setRetainInstance(true);
     }
 
     @Nullable
