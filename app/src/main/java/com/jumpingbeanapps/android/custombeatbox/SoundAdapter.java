@@ -1,42 +1,54 @@
 package com.jumpingbeanapps.android.custombeatbox;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.util.List;
 
 class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
 
     private List<Sound> sounds;
+    private int[] colors;
 
-    SoundAdapter(List<Sound> sounds){
+    //Color index
+    private int currentCIndex;
+
+    SoundAdapter(List<Sound> sounds, int[] colors){
         this.sounds = sounds;
+        this.colors = colors;
+
     }
 
-    static class SoundHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener{
+    static class SoundHolder extends RecyclerView.ViewHolder {
 
-        private Button button;
         private Sound sound;
+
+        private ImageButton playSound;
+        private TextView name;
 
         SoundHolder(View itemView) {
             super(itemView);
-            button = (Button) itemView.findViewById(R.id.button_detail_view);
+            //TODO: Add button state change when clicked
+            playSound = (ImageButton) itemView.findViewById(R.id.imageButton_play_sound);
+            playSound.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sound.play();
+                }
+            });
+
+            name = (TextView) itemView.findViewById(R.id.textview_sound_name);
 
         }
 
-        void bind(Sound sound){
+        void bind(Sound sound, int color){
             this.sound = sound;
-            button.setText(sound.getName());
-        }
-
-        @Override
-        public void onClick(View view) {
-            sound.play();
+            itemView.setBackgroundColor(color);
+            name.setText(sound.getName());
         }
 
     }
@@ -51,7 +63,12 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
 
     @Override
     public void onBindViewHolder(SoundHolder holder, int position) {
-        holder.bind(sounds.get(position));
+        if(position % colors.length == 0){
+            currentCIndex = 0;
+        }
+        final int color = colors[currentCIndex];
+        holder.bind(sounds.get(position), color);
+        currentCIndex++;
     }
 
     @Override

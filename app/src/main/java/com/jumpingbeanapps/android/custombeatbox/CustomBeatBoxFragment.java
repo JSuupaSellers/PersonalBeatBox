@@ -53,7 +53,10 @@ public class CustomBeatBoxFragment extends Fragment {
 
         RecyclerView rv = (RecyclerView) root.findViewById(R.id.recycler_view_custom_beatbox);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        soundAdapter = new SoundAdapter(beatBox.getSounds());
+
+        final int[] colors = getContext().getResources().getIntArray(R.array.colors);
+
+        soundAdapter = new SoundAdapter(beatBox.getSounds(), colors);
         rv.setAdapter(soundAdapter);
 
         return root;
