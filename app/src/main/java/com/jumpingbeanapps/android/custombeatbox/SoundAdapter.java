@@ -59,7 +59,7 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
                 @Override
                 public boolean onLongClick(View view){
                     DialogFragment dialogFragment = SoundDialogFragment.newInstance();
-                    dialogFragment.show(fm, TAG);
+                    dialogFragment.show(fm, "dialog");
                     return true;
                 }
             });
