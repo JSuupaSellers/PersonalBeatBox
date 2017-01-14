@@ -1,17 +1,17 @@
 package com.jumpingbeanapps.android.custombeatbox;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.content.Context;
-import android.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
@@ -20,24 +20,30 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
 
     private List<Sound> sounds;
     private int[] colors;
-    private Context context;
+    private FragmentManager fm;
+
+    private List<SoundHolder> soundHolders;
 
     //Color index
     private int currentCIndex;
 
-    SoundAdapter(List<Sound> sounds, int[] colors, Activity context){
+    SoundAdapter(List<Sound> sounds, int[] colors, FragmentManager fm){
         this.sounds = sounds;
         this.colors = colors;
-        this.context = context;
+        this.fm = fm;
+        soundHolders = new ArrayList<>();
 
     }
 
      class SoundHolder extends RecyclerView.ViewHolder {
 
+        private boolean isOnDelete;
+
         private Sound sound;
 
         private ImageButton playSound;
         private TextView name;
+        private CheckBox deleteBox;
 
         SoundHolder(View itemView) {
             super(itemView);
@@ -52,14 +58,21 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
             playSound.setOnLongClickListener(new View.OnLongClickListener(){
                 @Override
                 public boolean onLongClick(View view){
-                    FragmentManager fm =((Activity)context).getFragmentManager();
                     DialogFragment dialogFragment = SoundDialogFragment.newInstance();
-                    dialogFragment.show(fm,"dialog");
+                    dialogFragment.show(fm, TAG);
                     return true;
                 }
             });
 
             name = (TextView) itemView.findViewById(R.id.textview_sound_name);
+
+            deleteBox = (CheckBox) itemView.findViewById(R.id.checkbox_delete_or_not);
+            deleteBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    isOnDelete = b;
+                }
+            });
 
         }
 
@@ -67,6 +80,11 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
             this.sound = sound;
             itemView.setBackgroundColor(color);
             name.setText(sound.getName());
+        }
+
+        void setDeleteBoxVisible(boolean isVisible){
+            int visibility = isVisible ? View.VISIBLE : View.GONE;
+            deleteBox.setVisibility(visibility);
         }
 
     }
@@ -85,6 +103,16 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
             currentCIndex = 0;
         }
         final int color = colors[currentCIndex];
+
+        //Making sure that the references to all SoundHolders are up-to-date
+        if(soundHolders.size() - 1 >= position){
+
+            if(soundHolders.get(position) != null){
+                soundHolders.remove(position);
+            }
+        }
+
+        soundHolders.add(position, holder);
         holder.bind(sounds.get(position), color);
         currentCIndex++;
     }
@@ -92,5 +120,9 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
     @Override
     public int getItemCount() {
         return sounds.size();
+    }
+
+    List<SoundHolder> getSoundHolders() {
+        return soundHolders;
     }
 }

@@ -3,10 +3,12 @@ package com.jumpingbeanapps.android.custombeatbox;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,6 +19,7 @@ public class CustomBeatBoxFragment extends Fragment {
 
     private BeatBox beatBox;
 
+    private RecyclerView rv;
     private SoundAdapter soundAdapter;
 
     public static CustomBeatBoxFragment newInstance(){
@@ -52,16 +55,40 @@ public class CustomBeatBoxFragment extends Fragment {
         }
         //</Test code>
 
-        RecyclerView rv = (RecyclerView) root.findViewById(R.id.recycler_view_custom_beatbox);
+        rv = (RecyclerView) root.findViewById(R.id.recycler_view_custom_beatbox);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
 
         final int[] colors = getContext().getResources().getIntArray(R.array.colors);
-        FragmentManager fm = getFragmentManager();
-        soundAdapter = new SoundAdapter(beatBox.getSounds(), colors, getActivity());
+        soundAdapter = new SoundAdapter(beatBox.getSounds(), colors, getFragmentManager());
         rv.setAdapter(soundAdapter);
 
         return root;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_custombeatbox, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+
+            case R.id.delete_menu_item:
+
+                //Update SoundHolder checkbox visibility
+                for(SoundAdapter.SoundHolder holder:
+                        soundAdapter.getSoundHolders()){
+                    holder.setDeleteBoxVisible(true);
+                }
+                soundAdapter.notifyDataSetChanged();
+                getActivity().invalidateOptionsMenu();
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 }
