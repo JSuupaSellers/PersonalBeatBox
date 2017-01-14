@@ -1,5 +1,10 @@
 package com.jumpingbeanapps.android.custombeatbox;
 
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.content.Context;
+import android.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,19 +16,23 @@ import java.util.List;
 
 class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
 
+    private static final String TAG = "SoundAdapter";
+
     private List<Sound> sounds;
     private int[] colors;
+    private Context context;
 
     //Color index
     private int currentCIndex;
 
-    SoundAdapter(List<Sound> sounds, int[] colors){
+    SoundAdapter(List<Sound> sounds, int[] colors, Activity context){
         this.sounds = sounds;
         this.colors = colors;
+        this.context = context;
 
     }
 
-    static class SoundHolder extends RecyclerView.ViewHolder {
+     class SoundHolder extends RecyclerView.ViewHolder {
 
         private Sound sound;
 
@@ -38,6 +47,15 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
                 @Override
                 public void onClick(View view) {
                     sound.play();
+                }
+            });
+            playSound.setOnLongClickListener(new View.OnLongClickListener(){
+                @Override
+                public boolean onLongClick(View view){
+                    FragmentManager fm =((Activity)context).getFragmentManager();
+                    DialogFragment dialogFragment = SoundDialogFragment.newInstance();
+                    dialogFragment.show(fm,"dialog");
+                    return true;
                 }
             });
 

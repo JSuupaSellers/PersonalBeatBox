@@ -1,8 +1,12 @@
 package com.jumpingbeanapps.android.custombeatbox;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -55,11 +59,12 @@ public class CustomBeatBoxFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
 
         final int[] colors = getContext().getResources().getIntArray(R.array.colors);
-
-        soundAdapter = new SoundAdapter(beatBox.getSounds(), colors);
+        FragmentManager fm = getFragmentManager();
+        soundAdapter = new SoundAdapter(beatBox.getSounds(), colors, getActivity());
         rv.setAdapter(soundAdapter);
 
         return root;
     }
+
 
 }
