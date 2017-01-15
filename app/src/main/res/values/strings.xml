@@ -3,4 +3,5 @@
     <string name="sound_dialog_title">Pick A Sound...</string>
     <string name="sound_dialog_dismiss">Dismiss</string>
     <string name="sound_dialog_save">Save</string>
+    <string name="delete_menu_item">Delete</string>
 </resources>
