@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,12 +18,14 @@ public class CustomBeatBoxFragment extends Fragment {
     //TODO: Add a new sound icon (offer select/record option)
     //TODO: Customize theme and colors option
 
+    private boolean isOnDelete;
+
     private BeatBox beatBox;
 
     private RecyclerView rv;
     private SoundAdapter soundAdapter;
 
-    public static CustomBeatBoxFragment newInstance(){
+    public static CustomBeatBoxFragment newInstance() {
         return new CustomBeatBoxFragment();
     }
 
@@ -42,11 +45,11 @@ public class CustomBeatBoxFragment extends Fragment {
         beatBox = new BeatBox();
 
         //<Test code> Will be removed soon
-        for(int i = 0; i <= 4; i++){
+        for (int i = 0; i <= 4; i++) {
 
             Sound sound = new Sound();
             String name = "";
-            for(int j = 0; j <= i; j++){
+            for (int j = 0; j <= i; j++) {
                 name += "aa";
             }
             sound.setName(name);
@@ -72,17 +75,40 @@ public class CustomBeatBoxFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
+
+        switch (item.getItemId()) {
 
             case R.id.delete_menu_item:
 
-                //Update SoundHolder checkbox visibility
-                for(SoundAdapter.SoundHolder holder:
-                        soundAdapter.getSoundHolders()){
-                    holder.setDeleteBoxVisible(true);
+                if (!isOnDelete) {
+                    isOnDelete = true;
+
+                    //Make checkboxes visible
+                    for (SoundAdapter.SoundHolder holder :
+                            soundAdapter.getSoundHolders()) {
+                        holder.setDeleteBoxVisible(true);
+                    }
+                    //TODO: Implement "Select All" feature
+
+                } else {
+
+                    for (SoundAdapter.SoundHolder holder :
+                            soundAdapter.getSoundHolders()) {
+
+                        holder.setDeleteBoxVisible(false);
+
+                        if (holder.isOnDelete()) {
+
+                            holder.getDeleteBox().setChecked(false);
+                            beatBox.getSounds().remove(holder.getAdapterPosition());
+                        }
+
+                    }
+
+                    isOnDelete = false;
                 }
+
                 soundAdapter.notifyDataSetChanged();
-                getActivity().invalidateOptionsMenu();
 
                 return true;
 
