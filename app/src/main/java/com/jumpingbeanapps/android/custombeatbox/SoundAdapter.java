@@ -27,7 +27,7 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
     //Color index
     private int currentCIndex;
 
-    SoundAdapter(List<Sound> sounds, int[] colors, FragmentManager fm){
+    SoundAdapter(List<Sound> sounds, int[] colors, FragmentManager fm) {
         this.sounds = sounds;
         this.colors = colors;
         this.fm = fm;
@@ -35,7 +35,7 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
 
     }
 
-     class SoundHolder extends RecyclerView.ViewHolder {
+    class SoundHolder extends RecyclerView.ViewHolder {
 
         private boolean isOnDelete;
 
@@ -55,9 +55,9 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
                     sound.play();
                 }
             });
-            playSound.setOnLongClickListener(new View.OnLongClickListener(){
+            playSound.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public boolean onLongClick(View view){
+                public boolean onLongClick(View view) {
                     DialogFragment dialogFragment = SoundDialogFragment.newInstance();
                     dialogFragment.show(fm, "dialog");
                     return true;
@@ -65,7 +65,6 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
             });
 
             name = (TextView) itemView.findViewById(R.id.textview_sound_name);
-
             deleteBox = (CheckBox) itemView.findViewById(R.id.checkbox_delete_or_not);
             deleteBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -74,17 +73,25 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
                 }
             });
 
+
         }
 
-        void bind(Sound sound, int color){
+        void bind(Sound sound, int color) {
             this.sound = sound;
             itemView.setBackgroundColor(color);
             name.setText(sound.getName());
         }
 
-        void setDeleteBoxVisible(boolean isVisible){
-            int visibility = isVisible ? View.VISIBLE : View.GONE;
-            deleteBox.setVisibility(visibility);
+        void setDeleteBoxVisible(boolean visible) {
+            deleteBox.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+
+        boolean isOnDelete() {
+            return isOnDelete;
+        }
+
+        CheckBox getDeleteBox(){
+            return deleteBox;
         }
 
     }
@@ -99,15 +106,17 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
 
     @Override
     public void onBindViewHolder(SoundHolder holder, int position) {
-        if(position % colors.length == 0){
+        if (position % colors.length == 0) {
             currentCIndex = 0;
         }
+
+        //TODO: Fix color reassignment on list resize
         final int color = colors[currentCIndex];
 
         //Making sure that the references to all SoundHolders are up-to-date
-        if(soundHolders.size() - 1 >= position){
+        if (soundHolders.size() - 1 >= position) {
 
-            if(soundHolders.get(position) != null){
+            if (soundHolders.get(position) != null) {
                 soundHolders.remove(position);
             }
         }
