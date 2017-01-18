@@ -58,7 +58,7 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
             playSound.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    DialogFragment dialogFragment = SoundDialogFragment.newInstance();
+                    DialogFragment dialogFragment = SoundDialogFragment.newInstance((ArrayList<Sound>)sounds);
                     dialogFragment.show(fm, "dialog");
                     return true;
                 }
@@ -112,8 +112,7 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
 
         //TODO: Fix color reassignment on list resize
         final int color = colors[currentCIndex];
-
-        //Making sure that the references to all SoundHolders are up-to-date
+       // Making sure that the references to all SoundHolders are up-to-date
         if (soundHolders.size() - 1 >= position) {
 
             if (soundHolders.get(position) != null) {
