@@ -34,6 +34,8 @@ public class CustomBeatBoxFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         setRetainInstance(true);
+
+        beatBox = new BeatBox(getContext());
     }
 
     @Nullable
@@ -42,20 +44,19 @@ public class CustomBeatBoxFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_custom_beatbox, container, false);
 
-        beatBox = new BeatBox();
 
         //<Test code> Will be removed soon
-        for (int i = 0; i <= 4; i++) {
-
-            Sound sound = new Sound();
-            String name = "";
-            for (int j = 0; j <= i; j++) {
-                name += "aa";
-            }
-            sound.setName(name);
-            beatBox.getSounds().add(sound);
-
-        }
+//        for (int i = 0; i <= 4; i++) {
+//
+//            Sound sound = new Sound();
+//            String name = "";
+//            for (int j = 0; j <= i; j++) {
+//                name += "aa";
+//            }
+//            sound.setName(name);
+//            beatBox.getSounds().add(sound);
+//
+//        }
         //</Test code>
 
         rv = (RecyclerView) root.findViewById(R.id.recycler_view_custom_beatbox);

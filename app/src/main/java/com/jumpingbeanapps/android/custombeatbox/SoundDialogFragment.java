@@ -1,45 +1,81 @@
 package com.jumpingbeanapps.android.custombeatbox;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
+import android.Manifest;
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import java.util.ArrayList;
 
 public class SoundDialogFragment extends DialogFragment {
 
-    public static SoundDialogFragment newInstance(){
-        return new SoundDialogFragment();
-    }
+    private static final int REQUEST_RECORD_PERSMISSION = 200;
+    private String[] permissions = {Manifest.permission.RECORD_AUDIO};
 
-    //TODO: Inner Detail View for Selecting a sound to add.
+    private Button recordButton;
+    private Recorder recorder;
+    boolean startRecording = true;
+    private static String fileName = null;
+
+    public static SoundDialogFragment newInstance(ArrayList<Sound> sounds){
+        SoundDialogFragment frag = new SoundDialogFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("sounds",sounds);
+        frag.setArguments(args);
+        return frag;
+    }
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        fileName = getContext().getCacheDir().getAbsolutePath();
+        fileName += "/audiorecordtest.3gp";
+        recorder = new Recorder(fileName);
+        ActivityCompat.requestPermissions((Activity)getContext(),permissions,REQUEST_RECORD_PERSMISSION);
+    }
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_sound_dialog, container, false);
+        return inflater.inflate(R.layout.fragment_sound_dialog,container);
+    }
+    //TODO: Inner Detail View for Selecting a sound to add.
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+        super.onViewCreated(view,savedInstanceState);
+
+        ListView lv = (ListView)view.findViewById(R.id.sound_list_view);
+
+        //Test Code
+        ArrayList<String> myStringArray = new ArrayList<>();
+        ArrayList<Sound> soundList = (ArrayList<Sound>)getArguments().getSerializable("sounds");
+
+        for(Sound sound : soundList){
+            myStringArray.add(sound.getName());
+        }
+
+        recordButton = (Button)view.findViewById(R.id.record_button);
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recorder.onRecord(startRecording);
+                if(startRecording){
+                    recordButton.setText("Recording");
+                }else{
+                    recordButton.setText("Record");
+                }
+                startRecording = !startRecording;
+            }
+        });
+        //Test Code
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getContext(),R.layout.simple_list_item,myStringArray);
+        lv.setAdapter(adapter);
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setView(R.layout.fragment_sound_dialog);
-        builder.setTitle("Pick A Sound...");
-        builder.setPositiveButton("Save", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which){
-                dismiss();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which){
-                dismiss();
-            }
-        });
-        return builder.create();
-    }
 }

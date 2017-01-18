@@ -1,14 +1,25 @@
 package com.jumpingbeanapps.android.custombeatbox;
 
-public class Sound {
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+public class Sound implements Serializable {
 
     private String soundPath;
     private String name;
 
-    public Sound(){
 
+    public Sound(String soundPath){
+        this.soundPath = soundPath;
+        String[] components = soundPath.split("/");
+        String filename = components[components.length - 1];
+        name = filename.replace(".WAV","");
     }
 
+    public String getSoundPath(){
+        return soundPath;
+    }
 
     public String getName(){
         return name;
@@ -20,4 +31,5 @@ public class Sound {
     public void play(){
 
     }
+
 }

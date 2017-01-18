@@ -1,19 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:padding="10dp"
     android:orientation="vertical"
-    android:title="@string/sound_dialog_title"
     android:weightSum="1">
 
+    <Button
+        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:id="@+id/cancel_button"
+        android:text="@string/sound_dialog_cancel"
+        android:layout_alignTop="@+id/save_button"
+        android:layout_toLeftOf="@+id/save_button"
+        android:layout_toStartOf="@+id/save_button"/>
+
+    <Button
+        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:text="@string/sound_dialog_save"
+        android:id="@+id/save_button"
+        android:layout_marginTop="128dp"
+        android:layout_below="@+id/sound_list_view"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
     <TextView
-        android:id="@+id/dialog_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Will contain RecyclerView of user and sample sounds"
-        android:textSize="20sp" />
+        android:id="@+id/sample_sounds_text_view"
+        android:layout_height="58dp"
+        android:layout_width="117dp"
+        android:text="Sample Sounds:"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <ListView
+        android:layout_height="144dp"
+        android:id="@+id/sound_list_view"
+        android:scrollbars="none"
+        android:layout_width="250dp"
+        android:layout_below="@+id/sample_sounds_text_view"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+            android:id="@+id/user_sounds_text_view"
+            android:layout_width="117dp"
+            android:text="User Sounds:"
+            android:layout_height="58dp"
+            android:layout_below="@+id/sound_list_view"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="14dp"/>
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:text="Record"
+        android:id="@+id/record_button"
+        android:layout_alignTop="@+id/cancel_button"
+        android:layout_toLeftOf="@+id/cancel_button"
+        android:layout_toStartOf="@+id/cancel_button"/>
+</RelativeLayout>
 
 
-</LinearLayout>
+
