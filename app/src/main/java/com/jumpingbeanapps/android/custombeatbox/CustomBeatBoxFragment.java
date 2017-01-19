@@ -71,6 +71,8 @@ public class CustomBeatBoxFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu,inflater);
+        menu.clear();
         inflater.inflate(R.menu.menu_custombeatbox, menu);
     }
 
@@ -112,6 +114,10 @@ public class CustomBeatBoxFragment extends Fragment {
                 soundAdapter.notifyDataSetChanged();
 
                 return true;
+            //Instead of recording in the dialog fragment, id rather have a fragment
+            //dedicated to adding and deleting sounds.
+            //TODO: Implement sounds controller fragment to add and delete user sounds
+            case R.id.add_sound_menu_item:
 
             default:
                 return super.onOptionsItemSelected(item);
