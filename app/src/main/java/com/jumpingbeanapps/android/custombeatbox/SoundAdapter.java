@@ -21,13 +21,15 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
     private List<Sound> sounds;
     private int[] colors;
     private FragmentManager fm;
+    private BeatBox beatBox;
 
     private List<SoundHolder> soundHolders;
 
     //Color index
     private int currentCIndex;
 
-    SoundAdapter(List<Sound> sounds, int[] colors, FragmentManager fm) {
+    SoundAdapter(List<Sound> sounds, int[] colors, FragmentManager fm,BeatBox beatBox) {
+        this.beatBox = beatBox;
         this.sounds = sounds;
         this.colors = colors;
         this.fm = fm;
@@ -52,7 +54,7 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
             playSound.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    sound.play();
+                    beatBox.play(sound);
                 }
             });
             playSound.setOnLongClickListener(new View.OnLongClickListener() {

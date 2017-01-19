@@ -8,6 +8,7 @@ public class Sound implements Serializable {
 
     private String soundPath;
     private String name;
+    private Integer soundId;
 
 
     public Sound(String soundPath){
@@ -19,6 +20,12 @@ public class Sound implements Serializable {
 
     public String getSoundPath(){
         return soundPath;
+    }
+    public Integer getSoundId(){
+        return soundId;
+    }
+    public void setSoundId(Integer soundId){
+        this.soundId = soundId;
     }
 
     public String getName(){
