@@ -63,7 +63,7 @@ public class CustomBeatBoxFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
 
         final int[] colors = getContext().getResources().getIntArray(R.array.colors);
-        soundAdapter = new SoundAdapter(beatBox.getSounds(), colors, getFragmentManager());
+        soundAdapter = new SoundAdapter(beatBox.getSounds(), colors, getFragmentManager(),beatBox);
         rv.setAdapter(soundAdapter);
 
         return root;
