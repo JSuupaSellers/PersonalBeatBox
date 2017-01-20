@@ -1,6 +1,5 @@
 package com.jumpingbeanapps.android.custombeatbox;
 
-import android.Manifest;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.support.annotation.NonNull;
@@ -8,10 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.io.IOException;
-
-/**
- * Created by Josh on 1/17/2017.
- */
 
 public class Recorder extends AppCompatActivity{
 

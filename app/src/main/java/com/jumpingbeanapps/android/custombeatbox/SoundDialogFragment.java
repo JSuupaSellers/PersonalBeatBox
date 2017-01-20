@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SoundDialogFragment extends DialogFragment {
 
@@ -21,13 +22,13 @@ public class SoundDialogFragment extends DialogFragment {
 
     private Button recordButton;
     private Recorder recorder;
-    boolean startRecording = true;
+    private boolean startRecording = true;
     private static String fileName = null;
 
-    public static SoundDialogFragment newInstance(ArrayList<Sound> sounds){
+    public static SoundDialogFragment newInstance(List<Sound> sounds){
         SoundDialogFragment frag = new SoundDialogFragment();
         Bundle args = new Bundle();
-        args.putSerializable("sounds",sounds);
+        args.putSerializable("sounds", (ArrayList<Sound>) sounds);
         frag.setArguments(args);
         return frag;
     }
@@ -37,7 +38,7 @@ public class SoundDialogFragment extends DialogFragment {
         fileName = getContext().getCacheDir().getAbsolutePath();
         fileName += "/audiorecordtest.3gp";
         recorder = new Recorder(fileName);
-        ActivityCompat.requestPermissions((Activity)getContext(),permissions,REQUEST_RECORD_PERSMISSION);
+        ActivityCompat.requestPermissions((Activity) getContext(), permissions, REQUEST_RECORD_PERSMISSION);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,17 +50,17 @@ public class SoundDialogFragment extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view,savedInstanceState);
 
-        ListView lv = (ListView)view.findViewById(R.id.sound_list_view);
+        ListView lv = (ListView) view.findViewById(R.id.sound_list_view);
 
         //Test Code
         ArrayList<String> myStringArray = new ArrayList<>();
-        ArrayList<Sound> soundList = (ArrayList<Sound>)getArguments().getSerializable("sounds");
+        ArrayList<Sound> soundList = (ArrayList<Sound>) getArguments().getSerializable("sounds");
 
         for(Sound sound : soundList){
             myStringArray.add(sound.getName());
         }
 
-        recordButton = (Button)view.findViewById(R.id.record_button);
+        recordButton = (Button) view.findViewById(R.id.record_button);
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,7 +75,7 @@ public class SoundDialogFragment extends DialogFragment {
         });
         //Test Code
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getContext(),R.layout.simple_list_item,myStringArray);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.simple_list_item, myStringArray);
         lv.setAdapter(adapter);
     }
 

@@ -1,7 +1,5 @@
 package com.jumpingbeanapps.android.custombeatbox;
 
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 public class Sound implements Serializable {
