@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,26 +43,11 @@ public class CustomBeatBoxFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_custom_beatbox, container, false);
 
-
-        //<Test code> Will be removed soon
-//        for (int i = 0; i <= 4; i++) {
-//
-//            Sound sound = new Sound();
-//            String name = "";
-//            for (int j = 0; j <= i; j++) {
-//                name += "aa";
-//            }
-//            sound.setName(name);
-//            beatBox.getSounds().add(sound);
-//
-//        }
-        //</Test code>
-
         rv = (RecyclerView) root.findViewById(R.id.recycler_view_custom_beatbox);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
 
         final int[] colors = getContext().getResources().getIntArray(R.array.colors);
-        soundAdapter = new SoundAdapter(beatBox.getSounds(), colors, getFragmentManager(),beatBox);
+        soundAdapter = new SoundAdapter(beatBox.getSounds(), colors, getFragmentManager(), beatBox);
         rv.setAdapter(soundAdapter);
 
         return root;
@@ -87,37 +71,22 @@ public class CustomBeatBoxFragment extends Fragment {
                     isOnDelete = true;
 
                     //Make checkboxes visible
-                    for (SoundAdapter.SoundHolder holder :
-                            soundAdapter.getSoundHolders()) {
-                        holder.setDeleteBoxVisible(true);
-                    }
+                    soundAdapter.setDeleteOptionEnabled(true);
                     //TODO: Implement "Select All" feature
 
                 } else {
 
-                    for (SoundAdapter.SoundHolder holder :
-                            soundAdapter.getSoundHolders()) {
-
-                        holder.setDeleteBoxVisible(false);
-
-                        if (holder.isOnDelete()) {
-
-                            holder.getDeleteBox().setChecked(false);
-                            beatBox.getSounds().remove(holder.getAdapterPosition());
-                        }
-
-                    }
-
+                    soundAdapter.setDeleteOptionEnabled(false);
                     isOnDelete = false;
                 }
 
                 soundAdapter.notifyDataSetChanged();
 
                 return true;
+
             //Instead of recording in the dialog fragment, id rather have a fragment
             //dedicated to adding and deleting sounds.
             //TODO: Implement sounds controller fragment to add and delete user sounds
-            case R.id.add_sound_menu_item:
 
             default:
                 return super.onOptionsItemSelected(item);

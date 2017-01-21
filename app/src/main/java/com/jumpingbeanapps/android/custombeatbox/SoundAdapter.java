@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -21,25 +20,20 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
     private List<Sound> sounds;
     private int[] colors;
     private FragmentManager fm;
+
     private BeatBox beatBox;
 
-    private List<SoundHolder> soundHolders;
+    private boolean isDeleteOptionEnabled;
 
-    //Color index
-    private int currentCIndex;
-
-    SoundAdapter(List<Sound> sounds, int[] colors, FragmentManager fm,BeatBox beatBox) {
-        this.beatBox = beatBox;
+    SoundAdapter(List<Sound> sounds, int[] colors, FragmentManager fm, BeatBox beatBox) {
         this.sounds = sounds;
         this.colors = colors;
         this.fm = fm;
-        soundHolders = new ArrayList<>();
+        this.beatBox = beatBox;
 
     }
 
     class SoundHolder extends RecyclerView.ViewHolder {
-
-        private boolean isOnDelete;
 
         private Sound sound;
 
@@ -60,7 +54,7 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
             playSound.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    DialogFragment dialogFragment = SoundDialogFragment.newInstance((ArrayList<Sound>)sounds);
+                    DialogFragment dialogFragment = SoundDialogFragment.newInstance(sounds);
                     dialogFragment.show(fm, "dialog");
                     return true;
                 }
@@ -68,32 +62,24 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
 
             name = (TextView) itemView.findViewById(R.id.textview_sound_name);
             deleteBox = (CheckBox) itemView.findViewById(R.id.checkbox_delete_or_not);
-            deleteBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    isOnDelete = b;
-                }
-            });
-
 
         }
 
         void bind(Sound sound, int color) {
+
+            if(deleteBox.isChecked()){
+                sounds.remove(sound);
+            }
+
             this.sound = sound;
+
             itemView.setBackgroundColor(color);
+            setDeleteBoxVisible(isDeleteOptionEnabled);
             name.setText(sound.getName());
         }
 
-        void setDeleteBoxVisible(boolean visible) {
-            deleteBox.setVisibility(visible ? View.VISIBLE : View.GONE);
-        }
-
-        boolean isOnDelete() {
-            return isOnDelete;
-        }
-
-        CheckBox getDeleteBox(){
-            return deleteBox;
+        void setDeleteBoxVisible(boolean enableDeleteOption) {
+            deleteBox.setVisibility(enableDeleteOption ? View.VISIBLE : View.GONE);
         }
 
     }
@@ -108,23 +94,9 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
 
     @Override
     public void onBindViewHolder(SoundHolder holder, int position) {
-        if (position % colors.length == 0) {
-            currentCIndex = 0;
-        }
-
-        //TODO: Fix color reassignment on list resize
+        final int currentCIndex = position % colors.length;
         final int color = colors[currentCIndex];
-       // Making sure that the references to all SoundHolders are up-to-date
-        if (soundHolders.size() - 1 >= position) {
-
-            if (soundHolders.get(position) != null) {
-                soundHolders.remove(position);
-            }
-        }
-
-        soundHolders.add(position, holder);
         holder.bind(sounds.get(position), color);
-        currentCIndex++;
     }
 
     @Override
@@ -132,7 +104,7 @@ class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder> {
         return sounds.size();
     }
 
-    List<SoundHolder> getSoundHolders() {
-        return soundHolders;
+    void setDeleteOptionEnabled(boolean isDeleteOptionEnabled) {
+        this.isDeleteOptionEnabled = isDeleteOptionEnabled;
     }
 }
